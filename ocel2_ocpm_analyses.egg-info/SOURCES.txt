@@ -1,0 +1,12 @@
+LICENSE
+README.md
+pyproject.toml
+ocel2_ocpm_analyses.egg-info/PKG-INFO
+ocel2_ocpm_analyses.egg-info/SOURCES.txt
+ocel2_ocpm_analyses.egg-info/dependency_links.txt
+ocel2_ocpm_analyses.egg-info/requires.txt
+ocel2_ocpm_analyses.egg-info/top_level.txt
+utils/__init__.py
+utils/download_ocel_to_uc_volume.py
+utils/ocel2_uc_importer.py
+utils/write_ocel_to_uc_schema.py

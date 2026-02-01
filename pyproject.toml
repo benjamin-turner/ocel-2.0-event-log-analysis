@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ocel2_ocpm_analyses"
+version = "0.1"
+description = "Object-Centric Process Mining (OCPM) analyses of various Object-Centric Event Log (OCEL) 2.0-compliant event logs."
+authors = [
+    { name = "Benjamin Turner", email = "bjturner@outlook.com" }
+]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "pm4py>=2.7"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]

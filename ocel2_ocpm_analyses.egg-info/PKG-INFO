@@ -1,0 +1,12 @@
+Metadata-Version: 2.1
+Name: ocel2_ocpm_analyses
+Version: 0.1
+Summary: Object-Centric Process Mining (OCPM) analyses of various Object-Centric Event Log (OCEL) 2.0-compliant event logs.
+Author-email: Benjamin Turner <bjturner@outlook.com>
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pm4py>=2.7
+
+# OCEL 2.0 Event Log Analysis
+This repository contains **Object-Centric Process Mining** (OCPM) projects based upon simulated and real-world **Object-Centric Event Logs** (OCEL) structured according to the OCEL 2.0 standard. These event logs are available at https://www.ocel-standard.org/event-logs/overview/. The page's root website, www.ocel-standard.org, maintains the OCEL standard.
