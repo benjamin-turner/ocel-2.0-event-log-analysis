@@ -10,8 +10,7 @@ from pyspark.sql.functions import col, explode, lit
 from typing import Dict, List, Any
 import argparse
 
-
-class OCELToUCSChema:
+class OCELUCSchema:
     """
     Converts OCEL 2.0 JSON format to Unity Catalog relational tables.
     """
@@ -30,12 +29,12 @@ class OCELToUCSChema:
         self.schema = schema
         self.full_schema = f"{catalog}.{schema}"
         
-    def load_ocel_json(self, json_path: str) -> Dict[str, Any]:
+    def _load_ocel_json(self, json_path: str) -> Dict[str, Any]:
         """Load OCEL 2.0 JSON file."""
         with open(json_path, 'r') as f:
             return json.load(f)
     
-    def create_object_types_table(self, ocel_data: Dict) -> None:
+    def _create_and_load_object_types_table(self, ocel_data: Dict) -> None:
         """
         Create object_types table.
         Schema: object_type_name, attribute_name, attribute_type
@@ -65,7 +64,7 @@ class OCELToUCSChema:
         df.write.mode("overwrite").saveAsTable(table_name)
         print(f"✓ Created table: {table_name} ({df.count()} rows)")
     
-    def create_event_types_table(self, ocel_data: Dict) -> None:
+    def _create_and_load_event_types_table(self, ocel_data: Dict) -> None:
         """
         Create event_types table.
         Schema: event_type_name, attribute_name, attribute_type
@@ -94,7 +93,7 @@ class OCELToUCSChema:
         df.write.mode("overwrite").saveAsTable(table_name)
         print(f"✓ Created table: {table_name} ({df.count()} rows)")
     
-    def create_objects_table(self, ocel_data: Dict) -> None:
+    def create_and_load_objects_table(self, ocel_data: Dict) -> None:
         """
         Create objects table.
         Schema: object_id, object_type
@@ -111,7 +110,7 @@ class OCELToUCSChema:
         df.write.mode("overwrite").saveAsTable(table_name)
         print(f"✓ Created table: {table_name} ({df.count()} rows)")
     
-    def create_object_attributes_table(self, ocel_data: Dict) -> None:
+    def _create_and_load_attributes_table(self, ocel_data: Dict) -> None:
         """
         Create object_attributes table.
         Schema: object_id, attribute_name, attribute_value, attribute_time
@@ -142,7 +141,7 @@ class OCELToUCSChema:
         df.write.mode("overwrite").saveAsTable(table_name)
         print(f"✓ Created table: {table_name} ({df.count()} rows)")
     
-    def create_object_relationships_table(self, ocel_data: Dict) -> None:
+    def _create_and_load_object_relationships_table(self, ocel_data: Dict) -> None:
         """
         Create object_relationships table (object-to-object relationships).
         Schema: source_object_id, target_object_id, qualifier
@@ -171,7 +170,7 @@ class OCELToUCSChema:
         df.write.mode("overwrite").saveAsTable(table_name)
         print(f"✓ Created table: {table_name} ({df.count()} rows)")
     
-    def create_events_table(self, ocel_data: Dict) -> None:
+    def _create_and_load_events_table(self, ocel_data: Dict) -> None:
         """
         Create events table.
         Schema: event_id, event_type, event_time
@@ -189,7 +188,7 @@ class OCELToUCSChema:
         df.write.mode("overwrite").saveAsTable(table_name)
         print(f"✓ Created table: {table_name} ({df.count()} rows)")
     
-    def create_event_attributes_table(self, ocel_data: Dict) -> None:
+    def _create_and_load_event_attributes_table(self, ocel_data: Dict) -> None:
         """
         Create event_attributes table.
         Schema: event_id, attribute_name, attribute_value
@@ -218,7 +217,7 @@ class OCELToUCSChema:
         df.write.mode("overwrite").saveAsTable(table_name)
         print(f"✓ Created table: {table_name} ({df.count()} rows)")
     
-    def create_event_object_relationships_table(self, ocel_data: Dict) -> None:
+    def _create_and_load_event_object_relationships_table(self, ocel_data: Dict) -> None:
         """
         Create event_object_relationships table (event-to-object relationships).
         Schema: event_id, object_id, qualifier
@@ -238,7 +237,7 @@ class OCELToUCSChema:
         df.write.mode("overwrite").saveAsTable(table_name)
         print(f"✓ Created table: {table_name} ({df.count()} rows)")
     
-    def convert_json(self, json_path: str) -> None:
+    def write_ocel_json_to_schema(self, json_path: str) -> None:
         """
         Execute full conversion from OCEL 2.0 JSON to Unity Catalog tables.
         
@@ -246,19 +245,19 @@ class OCELToUCSChema:
             json_path: Path to the OCEL 2.0 JSON file
         """
         print(f"Loading OCEL 2.0 data from {json_path}...")
-        ocel_data = self.load_ocel_json(json_path)
+        ocel_data = self._load_ocel_json(json_path)
         
         print(f"\nCreating tables in {self.full_schema}...\n")
         
         # Create all tables
-        self.create_object_types_table(ocel_data)
-        self.create_event_types_table(ocel_data)
-        self.create_objects_table(ocel_data)
-        self.create_object_attributes_table(ocel_data)
-        self.create_object_relationships_table(ocel_data)
-        self.create_events_table(ocel_data)
-        self.create_event_attributes_table(ocel_data)
-        self.create_event_object_relationships_table(ocel_data)
+        self._create_and_load_object_types_table(ocel_data)
+        self._create_and_load_event_types_table(ocel_data)
+        self._create_and_load_objects_table(ocel_data)
+        self._create_and_load_object_attributes_table(ocel_data)
+        self._create_and_load_object_relationships_table(ocel_data)
+        self._create_and_load_events_table(ocel_data)
+        self._create_and_load_event_attributes_table(ocel_data)
+        self._create_and_load_event_object_relationships_table(ocel_data)
         
         print(f"\n✅ Successfully created all tables in {self.full_schema}")
         print("\nTable Schema Summary:")
@@ -279,5 +278,5 @@ if __name__ == "__main__":
     parser.add_argument('--json_path', type=str, required=True, help='Path to the OCEL 2.0 JSON file')
     args = parser.parse_args()
     
-    converter = OCELToUCSChema(spark, args.catalog, args.schema)
-    converter.convert_json(args.json_path)
+    converter = OCELUCSchema(spark, args.catalog, args.schema)
+    converter.write_ocel_json_to_schema(args.json_path)
